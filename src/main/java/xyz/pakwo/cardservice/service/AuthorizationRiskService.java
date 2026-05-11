@@ -9,6 +9,9 @@ import xyz.pakwo.cardservice.entity.CardAuthorization;
 import xyz.pakwo.cardservice.entity.RiskLevel;
 import xyz.pakwo.cardservice.integration.RiskApiClient;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 /**
  * @author sarwo.wibowo
  **/
@@ -37,7 +40,7 @@ public class AuthorizationRiskService {
         entity.setRiskScore(riskScore);
         entity.setRiskLevel(riskLevel);
         entity.setExternalRiskReference("POST-" + externalId);
-        entity.setStatus(riskLevel == RiskLevel.HIGH ? AuthorizationStatus.DECLINED : AuthorizationStatus.APPROVED);
+        entity.setUpdatedAt(LocalDateTime.now());
 
         return new RiskCheckResponse(
                 entity.getId(),
@@ -49,10 +52,24 @@ public class AuthorizationRiskService {
         );
     }
 
+    //this is just fake risk scoring, to ease the scenario, main idea is to ensure that able to call other 3rd party api
     private int calculateRiskScore(CardAuthorization entity, ExternalRiskResponse externalResponse) {
-        int amountFactor = entity.getAmount().intValue() % 50;
-        int externalFactor = externalResponse == null || externalResponse.id() == null ? 30 : externalResponse.id().intValue() % 50;
-        return Math.min(100, 10 + amountFactor + externalFactor);
+        int score = 10;
+        BigDecimal amount = entity.getAmount();
+        if (amount.compareTo(BigDecimal.valueOf(1000)) >= 0) {
+            score += 20;
+        }
+
+        if (amount.compareTo(BigDecimal.valueOf(5000)) >= 0) {
+            score += 40;
+        }
+        if (externalResponse == null || externalResponse.id() == null) {
+            score += 20;
+        } else {
+            score += externalResponse.id().intValue() % 20;
+        }
+
+        return Math.min(100, score);
     }
 
     private RiskLevel toRiskLevel(int riskScore) {

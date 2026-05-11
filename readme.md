@@ -29,6 +29,14 @@ A Spring Boot backend service for managing card authorization records. The proje
 - Correlation ID support using `X-Correlation-Id`
 - Liquibase-managed database schema
 
+## Business Rules
+
+- New authorization records are created with `PENDING` status.
+- Risk check must be completed before an authorization can be approved.
+- `HIGH` risk authorization cannot be approved.
+- `APPROVED`, `DECLINED`, and `FAILED` are terminal statuses.
+- Terminal authorizations cannot be updated again.
+
 ## Project Structure
 
 ```text

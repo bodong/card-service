@@ -11,6 +11,7 @@ import xyz.pakwo.cardservice.dto.PageResponse;
 import xyz.pakwo.cardservice.dto.UpdateAuthorizationStatusRequest;
 import xyz.pakwo.cardservice.entity.AuthorizationStatus;
 import xyz.pakwo.cardservice.entity.CardAuthorization;
+import xyz.pakwo.cardservice.entity.RiskLevel;
 import xyz.pakwo.cardservice.exception.BadRequestException;
 import xyz.pakwo.cardservice.exception.DuplicateTransactionReferenceException;
 import xyz.pakwo.cardservice.exception.ResourceNotFoundException;
@@ -80,17 +81,42 @@ public class CardAuthorizationService {
         );
     }
 
-    @Transactional
-    public CardAuthorizationResponse updateStatus(Long id, UpdateAuthorizationStatusRequest request) {
-        CardAuthorization entity = findById(id);
-        entity.setStatus(request.status());
-        return mapper.toResponse(entity);
-    }
-
     @Transactional(readOnly = true)
     public CardAuthorization findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card authorization not found: " + id));
+    }
+
+    @Transactional
+    public CardAuthorizationResponse updateStatus(Long id, UpdateAuthorizationStatusRequest request) {
+        CardAuthorization entity = findById(id);
+        validateStatusTransition(entity.getStatus(), entity.getRiskLevel(), request.status());
+        entity.setStatus(request.status());
+        return mapper.toResponse(entity);
+    }
+
+    private void validateStatusTransition(AuthorizationStatus currentStatus, RiskLevel riskLevel, AuthorizationStatus requestStatus) {
+        if (currentStatus == requestStatus) {
+            throw new BadRequestException("Authorization is already in status " + requestStatus);
+        }
+
+        if (isTerminalStatus(currentStatus)) {
+            throw new BadRequestException("Authorization status cannot be changed after it is " + currentStatus);
+        }
+
+        if (riskLevel == null) {
+            throw new BadRequestException("Risk check must be completed before authorization can be approved");
+        }
+
+        if (AuthorizationStatus.APPROVED == requestStatus && RiskLevel.HIGH == riskLevel) {
+            throw new BadRequestException("High risk authorization cannot be approved");
+        }
+    }
+
+    private boolean isTerminalStatus(AuthorizationStatus status) {
+        return status == AuthorizationStatus.APPROVED
+                || status == AuthorizationStatus.DECLINED
+                || status == AuthorizationStatus.FAILED;
     }
 
     private String generateTransactionReference() {

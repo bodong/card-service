@@ -20,6 +20,9 @@ public class RiskApiClient {
     }
 
     public ExternalRiskResponse getRiskSignal(Long authorizationId) {
+
+        //this is to ease simulation, because max record in the external api is just 100
+        //the idea is not about data capability, but integration with 3rd party api
         long externalId = Math.max(1L, Math.min(100L, authorizationId));
         try {
             return riskApiRestClient
