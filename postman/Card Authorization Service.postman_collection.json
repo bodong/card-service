@@ -1,0 +1,185 @@
+{
+  "info": {
+    "_postman_id": "4f6af33b-1260-41d4-a779-a609d1c4cd19",
+    "name": "Card Authorization Service",
+    "description": "Postman collection for Card Authorization Service.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1909098"
+  },
+  "item": [
+    {
+      "name": "Create Authorization",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Correlation-Id",
+            "value": "{{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cardNumber\": \"5454545454545454\",\n  \"customerId\": \"CUST-001\",\n  \"merchantName\": \"Pakwo Store\",\n  \"amount\": 120.50,\n  \"currency\": \"MYR\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/authorizations",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "authorizations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Authorization By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Correlation-Id",
+            "value": "{{$guid}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/authorizations/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "authorizations",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Authorizations - Page 0",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Correlation-Id",
+            "value": "{{$guid}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/authorizations?page=0&size=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "authorizations"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Authorization Status",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Correlation-Id",
+            "value": "{{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"APPROVED\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/authorizations/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "authorizations",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Perform Risk Check",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Correlation-Id",
+            "value": "{{$guid}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/authorizations/1/risk-check",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "authorizations",
+            "1",
+            "risk-check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/actuator/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "actuator",
+            "health"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}
