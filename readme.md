@@ -50,7 +50,8 @@ src/main/java/xyz/pakwo/cardservice
   ├── logging
   ├── mapper
   ├── repository
-  └── service
+  ├── service
+  └── util
 ```
 
 ## Run MSSQL Locally
@@ -188,7 +189,9 @@ postman/Card Authorization Service.postman_collection.json
 ### Identifier Strategy
 
 The `CardAuthorization` entity uses `@GeneratedValue(strategy = GenerationType.IDENTITY)` because it is simple, database-native, and suitable for this assessment project using MSSQL.
+
 For a high-throughput production system, the identifier strategy should be reviewed carefully. Depending on the scale and database design, alternatives such as database sequences, UUID/ULID, or Snowflake-style IDs may be preferred to improve scalability, batching, and distributed ID generation.
+
 The API also uses `transactionReference` as a business-level idempotency key to prevent duplicate authorization records.
 
 ### API Identifier Design
