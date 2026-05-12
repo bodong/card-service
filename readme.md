@@ -22,7 +22,7 @@ A Spring Boot backend service for managing card authorization records. The proje
 - Update authorization status
 - Retrieve authorization by ID
 - Retrieve authorizations with default page size of 10 and configurable maximum page size
-- Call external risk API through `RiskApiClient`
+- Call a configurable external API through `RiskApiClient` for risk-check simulation
 - Log request and response payloads into `logs/card-service.log`
 - Mask configured sensitive fields in request/response logs
 - Global exception handling
@@ -173,11 +173,23 @@ postman/Card Authorization Service.postman_collection.json
 - Liquibase migration files are organized by release version. The master changelog includes release-specific changelog files such as `release-1.0.0.yaml`, making future database changes easier to maintain.
 
 ### Identifier Strategy
+
 The `CardAuthorization` entity uses `@GeneratedValue(strategy = GenerationType.IDENTITY)` because it is simple, database-native, and suitable for this assessment project using MSSQL.
-For a high-throughput production payment system, the identifier strategy should be reviewed carefully. Depending on the scale and database design, alternatives such as database sequences, UUID/ULID, or Snowflake-style IDs may be preferred to improve scalability, batching, and distributed ID generation.
+For a high-throughput production system, the identifier strategy should be reviewed carefully. Depending on the scale and database design, alternatives such as database sequences, UUID/ULID, or Snowflake-style IDs may be preferred to improve scalability, batching, and distributed ID generation.
 The API also uses `transactionReference` as a business-level idempotency key to prevent duplicate authorization records.
 
+### API Identifier Design
+
+For simplicity, this project uses the database-generated authorization ID in endpoints such as:
+- `GET /api/v1/authorizations/{id}`
+- `PUT /api/v1/authorizations/{id}`
+- `POST /api/v1/authorizations/{id}/risk-check`
+
+This keeps the API simple and easy to test with Postman.
+For a production system, I would avoid exposing internal database identifiers directly to external clients. A business identifier such as `transactionReference` would be preferred for client-facing APIs because it is stable, meaningful to the requester, and avoids coupling external consumers to internal persistence design.
+
 ### Security Scope
+
 The following production security controls are out of scope for this assessment version:
 - API Gateway authentication
 - OAuth2/JWT-based authorization

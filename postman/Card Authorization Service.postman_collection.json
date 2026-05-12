@@ -11,7 +11,7 @@
       "name": "Positive Scenarios",
       "item": [
         {
-          "name": "Create Authorization",
+          "name": "1. Create Authorization",
           "request": {
             "method": "POST",
             "header": [
@@ -43,7 +43,7 @@
           "response": []
         },
         {
-          "name": "Get Authorization By ID",
+          "name": "2. Get Authorization By ID",
           "request": {
             "method": "GET",
             "header": [
@@ -68,7 +68,7 @@
           "response": []
         },
         {
-          "name": "Get Authorizations - Paginated",
+          "name": "3. Get Authorizations - Paginated",
           "request": {
             "method": "GET",
             "header": [
@@ -102,7 +102,7 @@
           "response": []
         },
         {
-          "name": "Perform Risk Check",
+          "name": "4. Perform Risk Check",
           "request": {
             "method": "POST",
             "header": [
@@ -112,7 +112,7 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/authorizations/2/risk-check",
+              "raw": "{{baseUrl}}/api/v1/authorizations/1/risk-check",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -120,7 +120,7 @@
                 "api",
                 "v1",
                 "authorizations",
-                "2",
+                "1",
                 "risk-check"
               ]
             }
@@ -128,7 +128,7 @@
           "response": []
         },
         {
-          "name": "Update Authorization Status",
+          "name": "5. Update Authorization Status",
           "request": {
             "method": "PUT",
             "header": [
@@ -247,39 +247,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"transactionReference\": \"TXN-20260512-0002\",\n    \"cardNumber\": \"5454545454541235\",\n    \"customerId\": \"CUST-008\",\n    \"merchantName\": \"Pakwo Store\",\n    \"amount\": 0.00,\n    \"currency\": \"MYR\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/authorizations",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "authorizations"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Authorization - Duplicate Transaction",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "X-Correlation-Id",
-                "value": "{{$guid}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"transactionReference\": \"TXN-20260512-0002\", //need to invoke this request twice, then it should throw 409 \n    \"cardNumber\": \"5454545454541235\",\n    \"customerId\": \"CUST-008\",\n    \"merchantName\": \"Pakwo Store\",\n    \"amount\": 10.00,\n    \"currency\": \"MYR\"\n}"
+              "raw": "{\n    \"transactionReference\": \"TXN-BAD-AMOUNT-001\",\n    \"cardNumber\": \"5454545454541235\",\n    \"customerId\": \"CUST-008\",\n    \"merchantName\": \"Pakwo Store\",\n    \"amount\": 0.00,\n    \"currency\": \"MYR\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/authorizations",
@@ -311,7 +279,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"transactionReference\": \"TXN-20260512-0002\",\n    \"cardNumber\": \"5454545454541235\",\n    \"customerId\": \"CUST-008\",\n    \"merchantName\": \"Pakwo Store\",\n    \"amount\": 10.00,\n    \"currency\": \"RM\"\n}"
+              "raw": "{\n    \"transactionReference\": \"TXN-BAD-CURRENCY-001\",\n    \"cardNumber\": \"5454545454541235\",\n    \"customerId\": \"CUST-008\",\n    \"merchantName\": \"Pakwo Store\",\n    \"amount\": 10.00,\n    \"currency\": \"RM\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/authorizations",
@@ -343,7 +311,39 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"transactionReference\": \"TXN-20260512-0002\",\n    \"cardNumber\": \"54545\",\n    \"customerId\": \"CUST-008\",\n    \"merchantName\": \"Pakwo Store\",\n    \"amount\": 10.00,\n    \"currency\": \"MYR\"\n}"
+              "raw": "{\n    \"transactionReference\": \"TXN-BAD-CARD-001\",\n    \"cardNumber\": \"54545\",\n    \"customerId\": \"CUST-008\",\n    \"merchantName\": \"Pakwo Store\",\n    \"amount\": 10.00,\n    \"currency\": \"MYR\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Authorization - Duplicate Transaction (Run Twice to get 409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"transactionReference\": \"TXN-DUPLICATE-001\",\n    \"cardNumber\": \"5454545454541235\",\n    \"customerId\": \"CUST-008\",\n    \"merchantName\": \"Pakwo Store\",\n    \"amount\": 10.00,\n    \"currency\": \"MYR\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/authorizations",
@@ -404,7 +404,7 @@
               "raw": "{\n  \"status\": \"FAKE\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/v1/authorizations/7",
+              "raw": "{{baseUrl}}/api/v1/authorizations/2",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -412,7 +412,7 @@
                 "api",
                 "v1",
                 "authorizations",
-                "7"
+                "2"
               ]
             }
           },
@@ -470,7 +470,7 @@
               "raw": "{\n  \"status\": \"PENDING\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/v1/authorizations/7",
+              "raw": "{{baseUrl}}/api/v1/authorizations/2",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -478,7 +478,7 @@
                 "api",
                 "v1",
                 "authorizations",
-                "7"
+                "2"
               ]
             }
           },
