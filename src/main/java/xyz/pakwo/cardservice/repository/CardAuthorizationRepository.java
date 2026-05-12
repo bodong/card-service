@@ -10,5 +10,6 @@ import java.util.Optional;
  **/
 public interface CardAuthorizationRepository extends JpaRepository<CardAuthorization, Long> {
     Optional<CardAuthorization> findByTransactionReference(String transactionReference);
+    boolean existsByTransactionReference(String transactionReference);
 }
 

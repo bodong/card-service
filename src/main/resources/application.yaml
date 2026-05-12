@@ -21,6 +21,20 @@ spring:
 server:
   port: ${SERVER_PORT:8080}
 
+card-service:
+  pagination:
+    max-page-size: ${MAX_PAGE_SIZE:50}
+  masking:
+    json-fields:
+      - cardNumber
+      - cvv
+      - pin
+      - password
+      - token
+      - authorizationToken
+      - accessToken
+      - refreshToken
+
 external:
   risk-api:
     base-url: ${RISK_API_BASE_URL:https://jsonplaceholder.typicode.com}

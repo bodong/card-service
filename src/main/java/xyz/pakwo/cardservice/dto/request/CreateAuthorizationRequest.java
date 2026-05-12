@@ -1,4 +1,4 @@
-package xyz.pakwo.cardservice.dto;
+package xyz.pakwo.cardservice.dto.request;
 
 import jakarta.validation.constraints.*;
 
@@ -8,6 +8,9 @@ import java.math.BigDecimal;
  * @author sarwo.wibowo
  **/
 public record CreateAuthorizationRequest(
+        @NotBlank(message = "Transaction reference is required")
+        String transactionReference,
+
         @NotBlank(message = "cardNumber is required")
         @Pattern(regexp = "^[0-9]{12,19}$", message = "cardNumber must contain 12 to 19 digits")
         String cardNumber,

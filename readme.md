@@ -21,10 +21,10 @@ A Spring Boot backend service for managing card authorization records. The proje
 - Create card authorization record
 - Update authorization status
 - Retrieve authorization by ID
-- Retrieve authorizations with fixed page size of 10
+- Retrieve authorizations with default page size of 10 and configurable maximum page size
 - Call external risk API through `RiskApiClient`
 - Log request and response payloads into `logs/card-service.log`
-- Mask card numbers in request/response logs
+- Mask configured sensitive fields in request/response logs
 - Global exception handling
 - Correlation ID support using `X-Correlation-Id`
 - Liquibase-managed database schema
@@ -72,8 +72,7 @@ Username: sa
 Password: Dur1an!Super$
 ```
 ### Common Issue
-When encounter `failed to register layer: sync /var/lib/docker/image/overlay2/layerdb/tmp/write-set-1646617768/diff: input/output error`
-Check your docker/config json file, example `vi ~/.docker/config.json`, ensure to back up first, if containing `"credStore": "desktop"`, then remove it and run the docker compose again. 
+If Docker returns a credential helper error such as `docker-credential-desktop: executable file not found`, back up and check `~/.docker/config.json`. If it contains `"credsStore": "desktop"` or `"credStore": "desktop"`, remove that entry and run Docker Compose again.
 
 ## Run Application
 
@@ -102,7 +101,7 @@ Tests use H2 in-memory database with Liquibase migration for portability.
 |---|---|---|
 | POST | `/api/v1/authorizations` | Create authorization |
 | GET | `/api/v1/authorizations/{id}` | Get authorization by ID |
-| GET | `/api/v1/authorizations?page=0` | Get paginated authorizations, 10 records/page |
+| GET | `/api/v1/authorizations?page=0&size=10` | Get paginated authorizations, default 10 records/page |
 | PUT | `/api/v1/authorizations/{id}` | Update authorization status |
 | POST | `/api/v1/authorizations/{id}/risk-check` | Call external risk API and update risk result |
 | GET | `/actuator/health` | Health check |
@@ -111,6 +110,7 @@ Tests use H2 in-memory database with Liquibase migration for portability.
 
 ```json
 {
+  "transactionReference": "TXN-20260512-0001",
   "cardNumber": "5454545454545454",
   "customerId": "CUST-001",
   "merchantName": "Pakwo Store",
@@ -137,7 +137,7 @@ The log includes:
 - duration
 - correlation ID
 
-Sensitive card numbers are masked before being written to logs.
+Configured sensitive fields such as card number, CVV, PIN, password, and tokens are masked before being written to logs.
 
 ## External API Integration
 
@@ -158,7 +158,7 @@ RISK_API_BASE_URL=http://localhost:9090 mvn spring-boot:run
 Import this file into Postman:
 
 ```text
-postman/Card-Service.postman_collection.json
+postman/Card Authorization Service.postman_collection.json
 ```
 
 ## Design Notes
@@ -170,3 +170,18 @@ postman/Card-Service.postman_collection.json
 - `GET` operations use `@Transactional(readOnly = true)`.
 - External API integration is isolated behind `RiskApiClient`.
 - Database schema is managed by Liquibase instead of relying on Hibernate auto-create.
+- Liquibase migration files are organized by release version. The master changelog includes release-specific changelog files such as `release-1.0.0.yaml`, making future database changes easier to maintain.
+
+### Identifier Strategy
+The `CardAuthorization` entity uses `@GeneratedValue(strategy = GenerationType.IDENTITY)` because it is simple, database-native, and suitable for this assessment project using MSSQL.
+For a high-throughput production payment system, the identifier strategy should be reviewed carefully. Depending on the scale and database design, alternatives such as database sequences, UUID/ULID, or Snowflake-style IDs may be preferred to improve scalability, batching, and distributed ID generation.
+The API also uses `transactionReference` as a business-level idempotency key to prevent duplicate authorization records.
+
+### Security Scope
+The following production security controls are out of scope for this assessment version:
+- API Gateway authentication
+- OAuth2/JWT-based authorization
+- mTLS for service-to-service communication
+- RBAC for operational access
+- Rate limiting and throttling
+- Audit logging for sensitive operations

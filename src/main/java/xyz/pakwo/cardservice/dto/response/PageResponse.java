@@ -1,4 +1,4 @@
-package xyz.pakwo.cardservice.dto;
+package xyz.pakwo.cardservice.dto.response;
 
 import java.util.List;
 

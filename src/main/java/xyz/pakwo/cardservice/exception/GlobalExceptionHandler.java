@@ -1,7 +1,6 @@
 package xyz.pakwo.cardservice.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.MDC;
@@ -12,7 +11,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import xyz.pakwo.cardservice.dto.ErrorResponse;
+import xyz.pakwo.cardservice.dto.response.ErrorResponse;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -72,7 +71,6 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, "Malformed JSON request", request, Map.of());
     }
 
-    @Nonnull
     private static String getMessage(InvalidFormatException invalidFormatException) {
         String fieldName = invalidFormatException.getPath().isEmpty() ? "unknown" : invalidFormatException.getPath().getLast().getFieldName();
         String rejectedValue = String.valueOf(invalidFormatException.getValue());

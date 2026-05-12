@@ -15,7 +15,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "card_authorization")
+@Table(
+        name = "card_authorization",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_card_authorization_transaction_reference",
+                        columnNames = "transaction_reference"
+                )
+        }
+)
 public class CardAuthorization {
 
     @Id

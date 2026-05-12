@@ -1,4 +1,4 @@
-package xyz.pakwo.cardservice.dto;
+package xyz.pakwo.cardservice.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import xyz.pakwo.cardservice.entity.AuthorizationStatus;

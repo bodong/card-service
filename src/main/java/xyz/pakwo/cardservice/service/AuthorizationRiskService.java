@@ -2,8 +2,8 @@ package xyz.pakwo.cardservice.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.pakwo.cardservice.dto.ExternalRiskResponse;
-import xyz.pakwo.cardservice.dto.RiskCheckResponse;
+import xyz.pakwo.cardservice.dto.response.ExternalRiskResponse;
+import xyz.pakwo.cardservice.dto.response.RiskCheckResponse;
 import xyz.pakwo.cardservice.entity.AuthorizationStatus;
 import xyz.pakwo.cardservice.entity.CardAuthorization;
 import xyz.pakwo.cardservice.entity.RiskLevel;
@@ -73,7 +73,7 @@ public class AuthorizationRiskService {
     }
 
     private RiskLevel toRiskLevel(int riskScore) {
-        if (riskScore >= 75) {
+        if (riskScore >= 70) {
             return RiskLevel.HIGH;
         }
         if (riskScore >= 40) {

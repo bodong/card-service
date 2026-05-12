@@ -14,11 +14,8 @@ import java.time.Duration;
 @Configuration
 public class RestClientConfig {
     @Bean
-    public RestClient riskApiRestClient(
-            RestClient.Builder builder,
-            @Value("${external.risk-api.base-url}") String baseUrl,
-            @Value("${external.risk-api.timeout-ms}") long timeoutMs
-    ) {
+    public RestClient riskApiRestClient(RestClient.Builder builder, @Value("${external.risk-api.base-url}") String baseUrl,
+            @Value("${external.risk-api.timeout-ms}") long timeoutMs) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         Duration timeout = Duration.ofMillis(timeoutMs);
         requestFactory.setConnectTimeout(timeout);

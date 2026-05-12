@@ -6,7 +6,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import xyz.pakwo.cardservice.dto.*;
+import xyz.pakwo.cardservice.dto.request.CreateAuthorizationRequest;
+import xyz.pakwo.cardservice.dto.request.UpdateAuthorizationStatusRequest;
+import xyz.pakwo.cardservice.dto.response.CardAuthorizationResponse;
+import xyz.pakwo.cardservice.dto.response.PageResponse;
+import xyz.pakwo.cardservice.dto.response.RiskCheckResponse;
 import xyz.pakwo.cardservice.service.AuthorizationRiskService;
 import xyz.pakwo.cardservice.service.CardAuthorizationService;
 

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
-import xyz.pakwo.cardservice.dto.ExternalRiskResponse;
+import xyz.pakwo.cardservice.dto.response.ExternalRiskResponse;
 import xyz.pakwo.cardservice.exception.ExternalApiException;
 
 /**

@@ -1,0 +1,104 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.0-001-create-card-authorization
+      author: Sarwo Wibowo
+      changes:
+        - createTable:
+            tableName: card_authorization
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: transaction_reference
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uk_card_auth_transaction_reference
+
+              - column:
+                  name: card_number_masked
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: customer_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: merchant_name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: amount
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: currency
+                  type: VARCHAR(3)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: risk_score
+                  type: INT
+
+              - column:
+                  name: risk_level
+                  type: VARCHAR(20)
+
+              - column:
+                  name: external_risk_reference
+                  type: VARCHAR(100)
+
+              - column:
+                  name: created_at
+                  type: DATETIME2
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: DATETIME2
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            tableName: card_authorization
+            indexName: idx_card_auth_customer_id
+            columns:
+              - column:
+                  name: customer_id
+
+        - createIndex:
+            tableName: card_authorization
+            indexName: idx_card_auth_status
+            columns:
+              - column:
+                  name: status
+
+        - createIndex:
+            tableName: card_authorization
+            indexName: idx_card_auth_created_at
+            columns:
+              - column:
+                  name: created_at

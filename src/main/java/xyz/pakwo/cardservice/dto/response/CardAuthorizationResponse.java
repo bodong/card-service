@@ -1,4 +1,4 @@
-package xyz.pakwo.cardservice.dto;
+package xyz.pakwo.cardservice.dto.response;
 
 import xyz.pakwo.cardservice.entity.AuthorizationStatus;
 import xyz.pakwo.cardservice.entity.RiskLevel;

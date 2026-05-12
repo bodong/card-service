@@ -2,8 +2,8 @@ package xyz.pakwo.cardservice.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import xyz.pakwo.cardservice.dto.CardAuthorizationResponse;
-import xyz.pakwo.cardservice.dto.CreateAuthorizationRequest;
+import xyz.pakwo.cardservice.dto.response.CardAuthorizationResponse;
+import xyz.pakwo.cardservice.dto.request.CreateAuthorizationRequest;
 import xyz.pakwo.cardservice.entity.CardAuthorization;
 
 /**
