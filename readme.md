@@ -1,6 +1,8 @@
 # Card Authorization Service
 
-A Spring Boot backend service for managing card authorization records. The project demonstrates maintainable layering, MSSQL persistence, Liquibase migration, transactional service methods, request/response logging, pagination, validation, and integration with an external API.
+A Spring Boot backend service for managing card authorization records. The project demonstrates maintainable layering,
+MSSQL persistence, Liquibase migration, transactional service methods, request/response logging, pagination, validation,
+and integration with an external API.
 
 ## Tech Stack
 
@@ -61,7 +63,9 @@ Start SQL Server and create `TESTDB`:
 ```bash
 docker compose -f docker/db/docker-compose.yml up -d
 ```
-The local database uses the official SQL Server 2022 container image for ease of setup. In production or controlled environments, the image tag should be pinned to an approved SQL Server build.
+
+The local database uses the official SQL Server 2022 container image for ease of setup. In production or controlled
+environments, the image tag should be pinned to an approved SQL Server build.
 
 The compose file starts MSSQL and runs an initialization script to create `TESTDB`.
 
@@ -72,21 +76,29 @@ DB URL: jdbc:sqlserver://localhost:1433;databaseName=TESTDB;encrypt=false;trustS
 Username: sa
 Password: Dur1an!Super$
 ```
+
 ### Common Issue
-If Docker returns a credential helper error such as `docker-credential-desktop: executable file not found`, back up and check `~/.docker/config.json`. If it contains `"credsStore": "desktop"` or `"credStore": "desktop"`, remove that entry and run Docker Compose again.
+
+If Docker returns a credential helper error such as `docker-credential-desktop: executable file not found`, back up and
+check `~/.docker/config.json`. If it contains `"credsStore": "desktop"` or `"credStore": "desktop"`, remove that entry
+and run Docker Compose again.
 
 ## Database Reset and Rollback
 
-For this assessment project, the local MSSQL database is treated as disposable because it runs through Docker Compose. To keep local development simple, the database can be reset by removing the Docker volume:
+For this assessment project, the local MSSQL database is treated as disposable because it runs through Docker Compose.
+To keep local development simple, the database can be reset by removing the Docker volume:
 
 ```bash
 docker compose -f docker/db/docker-compose.yml down -v
 docker compose -f docker/db/docker-compose.yml up -d
 ```
-The -v option removes the Docker volume used by MSSQL, so all local database data is deleted. On the next application startup, Liquibase applies the changelog files again and recreates the schema.
 
-This approach is intentionally simple for local development and assessment review. In shared or production-like environments, database rollback should be handled through proper Liquibase rollback practices, such as rollback tags, reviewed rollback scripts, and rollback SQL preview before execution.
+The -v option removes the Docker volume used by MSSQL, so all local database data is deleted. On the next application
+startup, Liquibase applies the changelog files again and recreates the schema.
 
+This approach is intentionally simple for local development and assessment review. In shared or production-like
+environments, database rollback should be handled through proper Liquibase rollback practices, such as rollback tags,
+reviewed rollback scripts, and rollback SQL preview before execution.
 
 ## Run Application
 
@@ -111,14 +123,14 @@ Tests use H2 in-memory database with Liquibase migration for portability.
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/v1/authorizations` | Create authorization |
-| GET | `/api/v1/authorizations/{id}` | Get authorization by ID |
-| GET | `/api/v1/authorizations?page=0&size=10` | Get paginated authorizations, default 10 records/page |
-| PUT | `/api/v1/authorizations/{id}` | Update authorization status |
-| POST | `/api/v1/authorizations/{id}/risk-check` | Call external risk API and update risk result |
-| GET | `/actuator/health` | Health check |
+| Method | Endpoint                                 | Description                                           |
+|--------|------------------------------------------|-------------------------------------------------------|
+| POST   | `/api/v1/authorizations`                 | Create authorization                                  |
+| GET    | `/api/v1/authorizations/{id}`            | Get authorization by ID                               |
+| GET    | `/api/v1/authorizations?page=0&size=10`  | Get paginated authorizations, default 10 records/page |
+| PUT    | `/api/v1/authorizations/{id}`            | Update authorization status                           |
+| POST   | `/api/v1/authorizations/{id}/risk-check` | Call external risk API and update risk result         |
+| GET    | `/actuator/health`                       | Health check                                          |
 
 ## Sample Create Request
 
@@ -184,29 +196,37 @@ postman/Card Authorization Service.postman_collection.json
 - `GET` operations use `@Transactional(readOnly = true)`.
 - External API integration is isolated behind `RiskApiClient`.
 - Database schema is managed by Liquibase instead of relying on Hibernate auto-create.
-- Liquibase migration files are organized by release version. The master changelog includes release-specific changelog files such as `release-1.0.0.yaml`, making future database changes easier to maintain.
+- Liquibase migration files are organized by release version. The master changelog includes release-specific changelog
+  files such as `release-1.0.0.yaml`, making future database changes easier to maintain.
 
 ### Identifier Strategy
 
-The `CardAuthorization` entity uses `@GeneratedValue(strategy = GenerationType.IDENTITY)` because it is simple, database-native, and suitable for this assessment project using MSSQL.
+The `CardAuthorization` entity uses `@GeneratedValue(strategy = GenerationType.IDENTITY)` because it is simple,
+database-native, and suitable for this assessment project using MSSQL.
 
-For a high-throughput production system, the identifier strategy should be reviewed carefully. Depending on the scale and database design, alternatives such as database sequences, UUID/ULID, or Snowflake-style IDs may be preferred to improve scalability, batching, and distributed ID generation.
+For a high-throughput production system, the identifier strategy should be reviewed carefully. Depending on the scale
+and database design, alternatives such as database sequences, UUID/ULID, or Snowflake-style IDs may be preferred to
+improve scalability, batching, and distributed ID generation.
 
 The API also uses `transactionReference` as a business-level idempotency key to prevent duplicate authorization records.
 
 ### API Identifier Design
 
 For simplicity, this project uses the database-generated authorization ID in endpoints such as:
+
 - `GET /api/v1/authorizations/{id}`
 - `PUT /api/v1/authorizations/{id}`
 - `POST /api/v1/authorizations/{id}/risk-check`
 
 This keeps the API simple and easy to test with Postman.
-For a production system, I would avoid exposing internal database identifiers directly to external clients. A business identifier such as `transactionReference` would be preferred for client-facing APIs because it is stable, meaningful to the requester, and avoids coupling external consumers to internal persistence design.
+For a production system, I would avoid exposing internal database identifiers directly to external clients. A business
+identifier such as `transactionReference` would be preferred for client-facing APIs because it is stable, meaningful to
+the requester, and avoids coupling external consumers to internal persistence design.
 
 ### Security Scope
 
 The following production security controls are out of scope for this assessment version:
+
 - API Gateway authentication
 - OAuth2/JWT-based authorization
 - mTLS for service-to-service communication

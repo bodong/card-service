@@ -11,7 +11,7 @@ services:
     volumes:
       - mssql_data:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Dur1an!Super$' -C -Q 'SELECT 1' || exit 1"]
+      test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Dur1an!Super$' -C -Q 'SELECT 1' || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -25,7 +25,7 @@ services:
         condition: service_healthy
     volumes:
       - ./initdb.sql:/scripts/initdb.sql:ro
-    entrypoint: ["/bin/bash", "-c", "/opt/mssql-tools18/bin/sqlcmd -S mssql -U sa -P 'Dur1an!Super$' -C -i /scripts/initdb.sql"]
+    entrypoint: [ "/bin/bash", "-c", "/opt/mssql-tools18/bin/sqlcmd -S mssql -U sa -P 'Dur1an!Super$' -C -i /scripts/initdb.sql" ]
     restart: "no"
 
 volumes:
