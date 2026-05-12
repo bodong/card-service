@@ -74,6 +74,19 @@ Password: Dur1an!Super$
 ### Common Issue
 If Docker returns a credential helper error such as `docker-credential-desktop: executable file not found`, back up and check `~/.docker/config.json`. If it contains `"credsStore": "desktop"` or `"credStore": "desktop"`, remove that entry and run Docker Compose again.
 
+## Database Reset and Rollback
+
+For this assessment project, the local MSSQL database is treated as disposable because it runs through Docker Compose. To keep local development simple, the database can be reset by removing the Docker volume:
+
+```bash
+docker compose -f docker/db/docker-compose.yml down -v
+docker compose -f docker/db/docker-compose.yml up -d
+```
+The -v option removes the Docker volume used by MSSQL, so all local database data is deleted. On the next application startup, Liquibase applies the changelog files again and recreates the schema.
+
+This approach is intentionally simple for local development and assessment review. In shared or production-like environments, database rollback should be handled through proper Liquibase rollback practices, such as rollback tags, reviewed rollback scripts, and rollback SQL preview before execution.
+
+
 ## Run Application
 
 ```bash
