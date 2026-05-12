@@ -8,154 +8,567 @@
   },
   "item": [
     {
-      "name": "Create Authorization",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          },
-          {
-            "key": "X-Correlation-Id",
-            "value": "{{$guid}}"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"cardNumber\": \"5454545454545454\",\n  \"customerId\": \"CUST-001\",\n  \"merchantName\": \"Pakwo Store\",\n  \"amount\": 120.50,\n  \"currency\": \"MYR\"\n}"
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/authorizations",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "authorizations"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get Authorization By ID",
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "X-Correlation-Id",
-            "value": "{{$guid}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/authorizations/1",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "authorizations",
-            "1"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get Authorizations - Page 0",
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "X-Correlation-Id",
-            "value": "{{$guid}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/authorizations?page=0&size=10",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "authorizations"
-          ],
-          "query": [
-            {
-              "key": "page",
-              "value": "0"
+      "name": "Positive Scenarios",
+      "item": [
+        {
+          "name": "Create Authorization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"5454545454545454\",\n  \"customerId\": \"CUST-001\",\n  \"merchantName\": \"Pakwo Store\",\n  \"amount\": 120.50,\n  \"currency\": \"MYR\"\n}"
             },
-            {
-              "key": "size",
-              "value": "10"
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations"
+              ]
             }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update Authorization Status",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
           },
-          {
-            "key": "X-Correlation-Id",
-            "value": "{{$guid}}"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"status\": \"APPROVED\"\n}"
+          "response": []
         },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/authorizations/1",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "authorizations",
-            "1"
-          ]
+        {
+          "name": "Get Authorization By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Authorizations - Paginated",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations?page=0&size=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Perform Risk Check",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/2/risk-check",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "2",
+                "risk-check"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Authorization Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "1"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "Perform Risk Check",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "X-Correlation-Id",
-            "value": "{{$guid}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/authorizations/1/risk-check",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "authorizations",
-            "1",
-            "risk-check"
-          ]
+      "name": "Negative Scenarios",
+      "item": [
+        {
+          "name": "Get Authorizations - Pagination Exceeds Max Limit",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations?page=0&size=100",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "100"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Authorization - Empty Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Authorization - Bad Amount",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"5454545454541235\",\n  \"customerId\": \"CUST-008\",\n  \"merchantName\": \"Pakwo Store\",\n  \"amount\":0.00,\n  \"currency\": \"MYR\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Authorization - Bad Currency",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"5454545454541235\",\n  \"customerId\": \"CUST-008\",\n  \"merchantName\": \"Pakwo Store\",\n  \"amount\":10.00,\n  \"currency\": \"RM\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Authorization - Bad Card No",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"54545\",\n  \"customerId\": \"CUST-008\",\n  \"merchantName\": \"Pakwo Store\",\n  \"amount\":10.00,\n  \"currency\": \"MYR\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Perform Risk Check Non-Exist Auth",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/999/risk-check",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "999",
+                "risk-check"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Authorization Status - Wrong Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"FAKE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/7",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update terminal status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Same Status (Pending to Pending)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PENDING\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/7",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Malformed JSON",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PENDING\"\n"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resource Not Found",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/122345",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "122345"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Method Not Allowed",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Authorization Status - Approve Before Risk Check",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Correlation-Id",
+                "value": "{{$guid}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/authorizations/7",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "authorizations",
+                "7"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
       "name": "Health Check",
