@@ -53,12 +53,7 @@ class CardAuthorizationServiceTest {
                 new CardServiceProperties.Masking(List.of("cardNumber", "cvv", "pin", "password", "token"))
         );
 
-        service = new CardAuthorizationService(
-                repository,
-                mapper,
-                sensitiveDataMasker,
-                properties
-        );
+        service = new CardAuthorizationService(repository, mapper, sensitiveDataMasker, properties);
     }
 
     @Test
@@ -125,11 +120,7 @@ class CardAuthorizationServiceTest {
         CardAuthorization entity = createPendingEntity();
         entity.setId(1L);
 
-        CardAuthorizationResponse response = createResponse(
-                1L,
-                AuthorizationStatus.PENDING,
-                null
-        );
+        CardAuthorizationResponse response = createResponse(1L, AuthorizationStatus.PENDING, null);
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
         when(mapper.toResponse(entity)).thenReturn(response);
@@ -154,12 +145,7 @@ class CardAuthorizationServiceTest {
         CardAuthorization entity = createPendingEntity();
         entity.setId(1L);
 
-        CardAuthorizationResponse response = createResponse(
-                1L,
-                AuthorizationStatus.PENDING,
-                null
-        );
-
+        CardAuthorizationResponse response = createResponse(1L, AuthorizationStatus.PENDING, null);
         PageRequest pageable = PageRequest.of(0, 10);
 
         when(repository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(entity), pageable, 1));
@@ -193,11 +179,7 @@ class CardAuthorizationServiceTest {
         entity.setId(1L);
         entity.setRiskLevel(RiskLevel.LOW);
 
-        CardAuthorizationResponse response = createResponse(
-                1L,
-                AuthorizationStatus.APPROVED,
-                RiskLevel.LOW
-        );
+        CardAuthorizationResponse response = createResponse(1L, AuthorizationStatus.APPROVED, RiskLevel.LOW);
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
         when(mapper.toResponse(entity)).thenReturn(response);
@@ -219,10 +201,7 @@ class CardAuthorizationServiceTest {
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
         when(mapper.toResponse(entity)).thenReturn(response);
 
-        CardAuthorizationResponse result = service.updateStatus(
-                1L,
-                new UpdateAuthorizationStatusRequest(AuthorizationStatus.DECLINED)
-        );
+        CardAuthorizationResponse result = service.updateStatus(1L, new UpdateAuthorizationStatusRequest(AuthorizationStatus.DECLINED));
 
         assertThat(entity.getStatus()).isEqualTo(AuthorizationStatus.DECLINED);
         assertThat(result.status()).isEqualTo(AuthorizationStatus.DECLINED);
@@ -236,9 +215,7 @@ class CardAuthorizationServiceTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-        assertThatThrownBy(() -> service.updateStatus(
-                1L,
-                new UpdateAuthorizationStatusRequest(AuthorizationStatus.APPROVED)
+        assertThatThrownBy(() -> service.updateStatus(1L, new UpdateAuthorizationStatusRequest(AuthorizationStatus.APPROVED)
         ))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Risk check must be completed before authorization can be approved");
@@ -287,9 +264,7 @@ class CardAuthorizationServiceTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-        assertThatThrownBy(() -> service.updateStatus(
-                1L,
-                new UpdateAuthorizationStatusRequest(AuthorizationStatus.DECLINED)
+        assertThatThrownBy(() -> service.updateStatus(1L, new UpdateAuthorizationStatusRequest(AuthorizationStatus.DECLINED)
         ))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Authorization status cannot be changed after it is APPROVED");
@@ -303,9 +278,7 @@ class CardAuthorizationServiceTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-        assertThatThrownBy(() -> service.updateStatus(
-                1L,
-                new UpdateAuthorizationStatusRequest(AuthorizationStatus.FAILED)
+        assertThatThrownBy(() -> service.updateStatus(1L, new UpdateAuthorizationStatusRequest(AuthorizationStatus.FAILED)
         ))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Authorization status cannot be changed after it is DECLINED");
@@ -319,23 +292,15 @@ class CardAuthorizationServiceTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-        assertThatThrownBy(() -> service.updateStatus(
-                1L,
-                new UpdateAuthorizationStatusRequest(AuthorizationStatus.DECLINED)
+        assertThatThrownBy(() -> service.updateStatus(1L, new UpdateAuthorizationStatusRequest(AuthorizationStatus.DECLINED)
         ))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Authorization status cannot be changed after it is FAILED");
     }
 
     private CreateAuthorizationRequest createRequest() {
-        return new CreateAuthorizationRequest(
-                "TXN-001",
-                "5454545454545454",
-                "CUST-001",
-                "Pakwo Store",
-                BigDecimal.valueOf(120.50),
-                "MYR"
-        );
+        return new CreateAuthorizationRequest("TXN-001", "5454545454545454", "CUST-001",
+                "Pakwo Store", BigDecimal.valueOf(120.50), "MYR");
     }
 
     private CardAuthorization createPendingEntity() {
@@ -353,20 +318,8 @@ class CardAuthorizationServiceTest {
     }
 
     private CardAuthorizationResponse createResponse(Long id, AuthorizationStatus status, RiskLevel riskLevel) {
-        return new CardAuthorizationResponse(
-                id,
-                "TXN-001",
-                "545454******5454",
-                "CUST-001",
-                "Pakwo Store",
-                BigDecimal.valueOf(120.50),
-                "MYR",
-                status,
-                null,
-                riskLevel,
-                null,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        return new CardAuthorizationResponse(id, "TXN-001", "545454******5454", "CUST-001",
+                "Pakwo Store", BigDecimal.valueOf(120.50), "MYR", status, null, riskLevel,
+                null, LocalDateTime.now(), LocalDateTime.now());
     }
 }

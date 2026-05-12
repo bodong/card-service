@@ -18,6 +18,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author sarwo.wibowo
+ **/
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -93,15 +96,8 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, HttpServletRequest request, Map<String, String> fieldErrors) {
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                status.value(),
-                status.getReasonPhrase(),
-                message,
-                request.getRequestURI(),
-                MDC.get("correlationId"),
-                fieldErrors
-        );
+        ErrorResponse response = new ErrorResponse(LocalDateTime.now(), status.value(), status.getReasonPhrase(), message,
+                request.getRequestURI(), MDC.get("correlationId"), fieldErrors);
         return ResponseEntity.status(status).body(response);
     }
 }

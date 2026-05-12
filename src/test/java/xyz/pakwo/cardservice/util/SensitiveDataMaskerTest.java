@@ -58,7 +58,7 @@ class SensitiveDataMaskerTest {
 
         String result = masker.maskJson(payload);
 
-        assertThat(result).contains("\"cardNumber\": \"****MASKED****\"");
+        assertThat(result).contains("\"cardNumber\": \"545454******5454\"");
         assertThat(result).contains("\"cvv\": \"****MASKED****\"");
         assertThat(result).contains("\"pin\": \"****MASKED****\"");
         assertThat(result).contains("\"password\": \"****MASKED****\"");

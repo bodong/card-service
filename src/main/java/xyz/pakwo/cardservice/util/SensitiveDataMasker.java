@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import xyz.pakwo.cardservice.config.CardServiceProperties;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -55,6 +56,22 @@ public class SensitiveDataMasker {
 
     private String maskJsonField(String payload, String fieldName) {
         String regex = "(\"" + Pattern.quote(fieldName) + "\"\\s*:\\s*\")([^\"]+)(\")";
-        return payload.replaceAll(regex, "$1" + MASKED_VALUE + "$3");
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(payload);
+
+        StringBuilder result = new StringBuilder();
+
+        while (matcher.find()) {
+            String originalValue = matcher.group(2);
+
+            String maskedValue = "cardNumber".equals(fieldName)
+                    ? maskCardNumber(originalValue)
+                    : MASKED_VALUE;
+
+            matcher.appendReplacement(result, Matcher.quoteReplacement(matcher.group(1) + maskedValue + matcher.group(3)));
+        }
+
+        matcher.appendTail(result);
+        return result.toString();
     }
 }
